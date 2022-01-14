@@ -22,12 +22,8 @@ function startRouting(setRoute) {
 
 function App() {
   const [route, setRoute] = useState(null)
-
+  const ActiveRoute = routes[route]
   useEffect(() => startRouting(setRoute), [])
-
-  function ActiveRoute() {
-    return routes[route]();
-  }
 
   return (
     <div className="App">
