@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Customer;
+use Illuminate\Http\Request;
+
+class CustomerController extends Controller
+{
+    public function index(Request $request)
+    {
+        return Customer::paginate();
+    }
+
+    public function show($id)
+    {
+        return Customer::findOrFail($id);
+    }
+
+    public function store(Request $request, $id = null)
+    {
+        $this->validate($request, [
+            'name'    => 'required|min:3',
+            // 'cpf'     => 'required|cpf',
+            'email'   => 'required|email',
+            'tel'     => 'required|min:3',
+            'address' => 'required|min:3',
+        ]);
+
+        if ($id) {
+            return Customer::find($id)
+                ->fill($request->all())
+                ->saveOrFail();
+        }
+
+        return Customer::create($request->all());
+    }
+
+    public function delete($id)
+    {
+        $c = Customer::findOrFail($id);
+        return $c->delete($id);
+    }
+}
