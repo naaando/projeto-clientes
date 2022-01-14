@@ -1,44 +1,54 @@
 import {useEffect, useState} from 'react';
 import { client } from '../../client';
 
+const errorMessage = (
+  <div>
+    <p>
+      Houve um erro
+    </p>
+
+    <p>
+      {JSON.stringify(error)}
+    </p>
+  </div>
+)
+
+const emptyListMessage = (
+  <small>
+    A lista está vazia
+  </small>
+)
+
+function Customers({customers, error}) {
+  // Request had an error
+  if (error) {
+    return errorMessage
+  }
+
+  // Empty customers list
+  if (!customers.length) {
+    return emptyListMessage
+  }
+
+  // Has customers
+  return (
+    <ul>
+      {customers.map(i => <li>{i}</li>)}
+    </ul>
+  )
+}
+
 export default function CustomerIndex() {
-  const [hasError, setHasError] = useState(null);
-  const [list, setList] = useState([]);
+  const [error, setError] = useState(null);
+  const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
     client
       .get('/customers')
-      .then(response => setList(response.data))
-      .catch(setHasError)
+      .then(response => setCustomers(response.data))
+      .catch(setError)
   }, []);
 
-  function renderList() {
-    if (hasError) {
-      return (
-        <div>
-          <p>
-            Houve um erro
-          </p>
-
-          <p>
-            {JSON.stringify(hasError)}
-          </p>
-        </div>
-      )
-    }
-
-    if (list.length) {
-      return (
-        <ul>
-          {list.map(i => <li>{i}</li>)}
-        </ul>
-      )
-    }
-
-    return (
-      <small>A lista está vazia</small>
-    )
-  }
 
   return (
     <div>
@@ -50,7 +60,7 @@ export default function CustomerIndex() {
         </a>
       </div>
 
-      {renderList()}
+      <Customers customers={customers} error={error} />
     </div>
   )
 }
