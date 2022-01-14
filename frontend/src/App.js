@@ -1,25 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
+import page from 'page';
+import CustomerIndex from './Pages/Customer/Index';
+import CustomerCreate from './Pages/Customer/Create';
+
+const routes = {
+  '/': CustomerIndex,
+  '/customer': CustomerIndex,
+  '/customer/create': CustomerCreate,
+}
+
+function startRouting(setRoute) {
+  page.base("/#")
+
+  for (const path in routes) {
+    page(path, () => setRoute(path))
+  }
+
+  page()
+}
 
 function App() {
+  const [route, setRoute] = useState(null)
+
+  useEffect(() => startRouting(setRoute), [])
+
+  function ActiveRoute() {
+    return routes[route]();
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {route && <ActiveRoute />}
     </div>
   );
 }
