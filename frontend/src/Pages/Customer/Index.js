@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import { client } from '../../client';
 
-const errorMessage = (
+const errorMessage = (error) => (
   <div>
     <p>
       Houve um erro
@@ -22,7 +22,7 @@ const emptyListMessage = (
 function Customers({customers, error}) {
   // Request had an error
   if (error) {
-    return errorMessage
+    return errorMessage(error)
   }
 
   // Empty customers list
