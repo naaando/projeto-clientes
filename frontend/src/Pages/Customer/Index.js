@@ -49,7 +49,6 @@ export default function CustomerIndex() {
       .catch(setError)
   }, []);
 
-
   return (
     <div>
       <h1>Lista de clientes</h1>
