@@ -14,9 +14,9 @@ const errorMessage = (error) => (
 )
 
 const emptyListMessage = (
-  <small>
+  <p className='text-gray-700 text-2xl p-10 animate-pulse ease-in-out duration-700'>
     A lista está vazia
-  </small>
+  </p>
 )
 
 function Customers({customers, error}) {
@@ -51,15 +51,22 @@ export default function CustomerIndex() {
 
   return (
     <div>
-      <h1>Lista de clientes</h1>
+      <h1 className="heading-1 text-left p-3 bg-gray-800 text-white">
+        Lista de clientes
+      </h1>
 
-      <div>
-        <a href='/#/customer/create'>
-          Criar novo cliente
-        </a>
+      <div className="container mx-auto">
+        <div className='flex p-2 justify-end'>
+          <a
+            href='/#/customer/create'
+            className='btn btn-blue block w-full sm:w-auto'
+          >
+            Criar novo cliente
+          </a>
+        </div>
+
+        <Customers customers={customers} error={error} />
       </div>
-
-      <Customers customers={customers} error={error} />
     </div>
   )
 }
