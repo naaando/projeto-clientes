@@ -78,13 +78,14 @@ function Customers({customers, error}) {
 export default function CustomerIndex() {
   const [error, setError] = useState(null);
   const [customers, setCustomers] = useState([]);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     client
-      .get('/customers')
+      .get('/customers', {params: {search}})
       .then(response => setCustomers(response.data.data))
       .catch(setError)
-  }, []);
+  }, [search]);
 
   return (
     <div>
@@ -93,7 +94,15 @@ export default function CustomerIndex() {
       </h1>
 
       <div className="container mx-auto">
-        <div className='flex p-2 justify-end'>
+        <div className='flex p-2'>
+          <input
+            type="search"
+            className='mr-auto'
+            placeholder='Buscar'
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+
           <a
             href='/#/customer/create'
             className='btn btn-blue block w-full sm:w-auto'
