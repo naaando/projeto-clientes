@@ -139,7 +139,6 @@ export default function CustomerIndex(props) {
         params: {
           search,
           page,
-          perPage: 1
         }
       })
       .then(response => {
