@@ -41,7 +41,7 @@ export default function CustomerCreate() {
     event.preventDefault();
     client
       .post('/customers', customer)
-      .then(() => document.location = '/#/customer')
+      .then(() => page('/#/customer'))
       .catch((e) => setError(e))
   }
 

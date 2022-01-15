@@ -1,3 +1,4 @@
+import page from 'page';
 import {useEffect, useState} from 'react';
 import { client } from '../../client';
 
@@ -19,6 +20,10 @@ const emptyListMessage = (
   </p>
 )
 
+function openCustomer(id) {
+  page(`/#/customer/${id}`)
+}
+
 function Customers({customers, error}) {
   // Request had an error
   if (error) {
@@ -32,9 +37,41 @@ function Customers({customers, error}) {
 
   // Has customers
   return (
-    <ul>
-      {customers.map(i => <li>{i}</li>)}
-    </ul>
+    <div className="p-2">
+      <table className='bg-gray-100 rounded overflow-hidden w-full'>
+        <thead>
+          <tr className='bg-gray-800 text-white text-sm'>
+            <th className='text-left p-2'>Nome</th>
+            <th className='text-left p-2'>E-mail</th>
+            <th className='text-left p-2'>CPF</th>
+            <th className='text-left p-2'>Endereço</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {customers.map(c => (
+            <tr
+              key={c.id}
+              className='p-2 odd:bg-gray-200 text-left hover:bg-yellow-300 hover:cursor-pointer'
+              onClick={() => openCustomer(c.id)}
+            >
+              <td className='p-2 text-gray-900'>
+                {c.name}
+              </td>
+              <td className='p-2 text-sm text-gray-700'>
+                {c.email}
+              </td>
+              <td className='p-2 text-sm text-gray-700'>
+                {c.cpf}
+              </td>
+              <td className='p-2 text-sm text-gray-700'>
+                {c.address}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
@@ -45,7 +82,7 @@ export default function CustomerIndex() {
   useEffect(() => {
     client
       .get('/customers')
-      .then(response => setCustomers(response.data))
+      .then(response => setCustomers(response.data.data))
       .catch(setError)
   }, []);
 
