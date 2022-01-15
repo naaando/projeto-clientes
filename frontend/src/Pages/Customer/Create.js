@@ -75,7 +75,7 @@ export default function CustomerCreate(props) {
   return (
     <div>
       <h1 className="heading-1 text-left p-3 bg-gray-800 text-white">
-        Criar cliente
+        {props.id ? 'Editando' : 'Criar'} cliente
       </h1>
 
       {error && (
