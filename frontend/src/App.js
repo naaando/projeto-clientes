@@ -18,9 +18,14 @@ function App() {
   useEffect(() => {
     page.base("/#")
 
+    page('*', (ctx, next) => {
+      ctx.searchParams = new URLSearchParams(ctx.querystring)
+      next()
+    })
+
     for (const path in routes) {
       page(path, ctx => setComponent(
-        React.createElement(routes[path], ctx.params)
+        React.createElement(routes[path], {...ctx})
       ))
     }
 
