@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import { useEffect, useState } from 'react';
 import page from 'page';
@@ -5,31 +6,28 @@ import CustomerIndex from './Pages/Customer/Index';
 import CustomerCreate from './Pages/Customer/Create';
 
 const routes = {
-  '/': CustomerIndex,
   '/customer': CustomerIndex,
   '/customer/create': CustomerCreate,
-}
-
-function startRouting(setRoute) {
-  page.base("/#")
-
-  for (const path in routes) {
-    page(path, () => setRoute(path))
-  }
-
-  page()
+  '/customer/:id': CustomerCreate,
+  '*': CustomerIndex,
 }
 
 function App() {
-  const [route, setRoute] = useState(null)
-  const ActiveRoute = routes[route]
-  useEffect(() => startRouting(setRoute), [])
+  const [component, setComponent] = useState(null)
 
-  return (
-    <div className="App">
-      {route && <ActiveRoute />}
-    </div>
-  );
+  useEffect(() => {
+    page.base("/#")
+
+    for (const path in routes) {
+      page(path, ctx => setComponent(
+        React.createElement(routes[path], ctx.params)
+      ))
+    }
+
+    page()
+  }, [])
+
+  return component
 }
 
 export default App;
