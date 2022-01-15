@@ -21,7 +21,7 @@ class CustomerController extends Controller
                 ->orWhere('address', 'like', "%$search%");
         }
 
-        return $customer->paginate(10);
+        return $customer->paginate($request->input('perPage', 10));
     }
 
     public function show($id)
