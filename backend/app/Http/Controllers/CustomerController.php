@@ -16,9 +16,9 @@ class CustomerController extends Controller
 
             $customer
                 ->where('name', 'like', $searchLike)
-                ->orWhere('cpf', $search)
-                ->orWhere('email', $search)
-                ->orWhere('address', $search);
+                ->orWhere('cpf', 'like', "%$search%")
+                ->orWhere('email', 'like', "%$search%")
+                ->orWhere('address', 'like', "%$search%");
         }
 
         return $customer->paginate();
