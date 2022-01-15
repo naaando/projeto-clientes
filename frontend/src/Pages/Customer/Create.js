@@ -1,4 +1,5 @@
-import { useState } from "react"
+import page from "page";
+import { useEffect, useState } from "react"
 import { client } from "../../client";
 
 function PresentErrorFields({error}) {
@@ -19,14 +20,24 @@ function PresentErrorFields({error}) {
   return Object
     .entries(translatedData)
     .map(([index, value]) => (
-      <p className="text-left">
+      <p key={index} className="text-left">
         <span className="font-bold mr-1">{index}:</span>
         {value}
       </p>
     ))
 }
 
-export default function CustomerCreate() {
+export default function CustomerCreate(props) {
+  useEffect(() => {
+    if (props.id) {
+      client
+        .get(`/customers/${props.id}`)
+        .then(response => {
+          setCustomer(response.data)
+        })
+    }
+  }, [props])
+
   const [customer, setCustomer] = useState({
     name: '',
     cpf: '',
@@ -39,10 +50,18 @@ export default function CustomerCreate() {
 
   function handleFormSubmit(event) {
     event.preventDefault();
-    client
-      .post('/customers', customer)
-      .then(() => page('/#/customer'))
-      .catch((e) => setError(e))
+
+    if (props.id) {
+      client
+        .put(`/customers/${props.id}`, customer)
+        .then(() => page('/#/customer'))
+        .catch((e) => setError(e))
+    } else {
+      client
+        .post('/customers', customer)
+        .then(() => page('/#/customer'))
+        .catch((e) => setError(e))
+    }
   }
 
   function handleInputChange(event) {
