@@ -9,7 +9,17 @@ class CustomerController extends Controller
 {
     public function index(Request $request)
     {
-        return Customer::paginate();
+        $customer = Customer::query();
+
+        if ($search = $request->input('search')) {
+            $searchLike = "%" . implode('%', explode(' ', $search)) . "%";
+
+            $customer
+                ->where('name', 'like', $searchLike)
+                ->orWhere('cpf', $search);
+        }
+
+        return $customer->paginate();
     }
 
     public function show($id)
